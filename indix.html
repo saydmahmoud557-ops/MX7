@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VERITAS ERP | نظام الإدارة الذكي</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Cairo',sans-serif;
+}
+
+:root{
+    --bg:#080d18;
+    --panel:#111a2b;
+    --panel2:#172238;
+    --gold:#d6ad55;
+    --text:#f1f4fa;
+    --muted:#8e9bb1;
+    --border:#26334a;
+}
+
+body{
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+}
+
+.login{
+    position:fixed;
+    inset:0;
+    background:linear-gradient(135deg,#080d18,#17243d);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+}
+
+.login-box{
+    width:380px;
+    max-width:90%;
+    background:var(--panel);
+    border:1px solid var(--border);
+    padding:40px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 20px 80px #0008;
+}
+
+.logo{
+    color:var(--gold);
+    font-size:32px;
+    font-weight:900;
+    letter-spacing:3px;
+}
+
+.login-box p{
+    color:var(--muted);
+    margin:10px 0 25px;
+}
+
+input,select{
+    width:100%;
+    padding:13px;
+    margin:8px 0;
+    background:#080f1d;
+    color:white;
+    border:1px solid var(--border);
+    border-radius:9px;
+    outline:none;
+}
+
+button{
+    cursor:pointer;
+    border:none;
+    border-radius:9px;
+    padding:12px 20px;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.login-btn{
+    width:100%;
+    background:var(--gold);
+    color:#111;
+    margin-top:15px;
+}
+
+button:hover{
+    opacity:.85;
+    transform:translateY(-2px);
+}
+
+.error{
+    color:#ff6666;
+    margin-top:12px;
+    font-size:13px;
+}
+
+.app{
+    display:none;
+}
+
+.sidebar{
+    width:250px;
+    height:100vh;
+    position:fixed;
+    right:0;
+    top:0;
+    background:#0d1525;
+    border-left:1px solid var(--border);
+    padding:25px 15px;
+    overflow-y:auto;
+}
+
+.brand{
+    text-align:center;
+    padding:10px;
+    border-bottom:1px solid var(--border);
+    margin-bottom:25px;
+}
+
+.brand h2{
+    color:var(--gold);
+    letter-spacing:2px;
+}
+
+.brand small{
+    color:var(--muted);
+}
+
+.menu-title{
+    color:#63728a;
+    font-size:12px;
+    margin:20px 12px 10px;
+}
+
+.menu button{
+    width:100%;
+    background:transparent;
+    color:#aab6c9;
+    text-align:right;
+    margin:3px 0;
+    padding:13px;
+    font-size:14px;
+}
+
+.menu button.active,
+.menu button:hover{
+    background:#1c2a41;
+    color:var(--gold);
+}
+
+.main{
+    margin-right:250px;
+    padding:25px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:30px;
+    flex-wrap:wrap;
+}
+
+.topbar h2{
+    font-size:23px;
+}
+
+.admin{
+    background:var(--panel);
+    padding:10px 17px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    color:var(--gold);
+}
+
+.welcome{
+    background:linear-gradient(110deg,#172944,#243a59);
+    padding:30px;
+    border-radius:17px;
+    border:1px solid #344969;
+    margin-bottom:25px;
+}
+
+.welcome h2{
+    font-size:25px;
+    margin-bottom:8px;
+}
+
+.welcome p{
+    color:#b5c2d7;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:17px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:22px;
+}
+
+.card small{
+    color:var(--muted);
+}
+
+.card h2{
+    font-size:27px;
+    margin:12px 0 5px;
+    color:var(--gold);
+}
+
+.card span{
+    color:#8c9bb1;
+    font-size:12px;
+}
+
+.section{
+    display:none;
+}
+
+.section.active{
+    display:block;
+}
+
+.content-grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.box{
+    background:var(--panel);
+    border:1px solid var(--border);
+    padding:22px;
+    border-radius:15px;
+    margin-bottom:20px;
+}
+
+.box h3{
+    margin-bottom:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:550px;
+}
+
+th,td{
+    padding:14px;
+    text-align:right;
+    border-bottom:1px solid var(--border);
+    font-size:13px;
+}
+
+th{
+    color:var(--gold);
+    background:#18243a;
+}
+
+td{
+    color:#bdc8d8;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+.gold-btn{
+    background:var(--gold);
+    color:#111;
+}
+
+.danger-btn{
+    background:#51232b;
+    color:white;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+.form-grid button{
+    grid-column:1/-1;
+}
+
+.footer{
+    text-align:center;
+    padding:30px;
+    color:#63728a;
+    font-size:12px;
+}
+
+@media(max-width:1000px){
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .content-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:700px){
+    .sidebar{
+        width:75px;
+        padding:15px 5px;
+    }
+
+    .brand h2{
+        font-size:12px;
+    }
+
+    .brand small,.menu-title{
+        display:none;
+    }
+
+    .menu button{
+        font-size:0;
+        text-align:center;
+    }
+
+    .menu button::first-letter{
+        font-size:20px;
+    }
+
+    .main{
+        margin-right:75px;
+        padding:13px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+    }
+
+    .card{
+        padding:13px;
+    }
+
+    .card h2{
+        font-size:20px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="login" id="loginScreen">
+
+    <div class="login-box">
+
+        <div class="logo">VERITAS</div>
+
+        <p>ENTERPRISE MANAGEMENT SYSTEM</p>
+
+        <input id="username" placeholder="اسم المستخدم">
+
+        <input id="password" type="password" placeholder="كلمة المرور">
+
+        <button class="login-btn" onclick="login()">تسجيل الدخول</button>
+
+        <div class="error" id="error"></div>
+
+    </div>
+
+</div>
+
+
+<!-- APPLICATION -->
+<div class="app" id="app">
+
+<aside class="sidebar">
+
+    <div class="brand">
+        <h2>VERITAS</h2>
+        <small>ERP MANAGEMENT SYSTEM</small>
+    </div>
+
+    <div class="menu">
+
+        <div class="menu-title">القائمة الرئيسية</div>
+
+        <button class="active" onclick="showPage('dashboard',this)">📊 لوحة التحكم</button>
+
+        <button onclick="showPage('students',this)">👨‍🎓 الطلاب</button>
+
+        <button onclick="showPage('accounting',this)">💰 الحسابات المالية</button>
+
+        <button onclick="showPage('transactions',this)">📒 العمليات المالية</button>
+
+        <button onclick="showPage('exams',this)">📝 الامتحانات</button>
+
+        <button onclick="showPage('reports',this)">📈 التقارير</button>
+
+        <div class="menu-title">النظام</div>
+
+        <button onclick="showPage('settings',this)">⚙️ الإعدادات</button>
+
+        <button onclick="logout()">🚪 تسجيل الخروج</button>
+
+    </div>
+
+</aside>
+
+
+<main class="main">
+
+    <div class="topbar">
+
+        <h2 id="pageTitle">لوحة التحكم</h2>
+
+        <div class="admin">👤 المدير | ADMIN</div>
+
+    </div>
+
+
+    <!-- DASHBOARD -->
+    <section class="section active" id="dashboard">
+
+        <div class="welcome">
+
+            <h2>مرحباً بك في VERITAS ERP</h2>
+
+            <p>نظام الإدارة الذكي والمتكامل للمؤسسات التعليمية.</p>
+
+        </div>
+
+        <div class="stats">
+
+            <div class="card">
+                <small>إجمالي الطلاب</small>
+                <h2 id="studentCount">0</h2>
+                <span>عدد الطلاب المسجلين</span>
+            </div>
+
+            <div class="card">
+                <small>الإيرادات</small>
+                <h2 id="income">0</h2>
+                <span>إجمالي الإيرادات المسجلة</span>
+            </div>
+
+            <div class="card">
+                <small>المصروفات</small>
+                <h2 id="expenses">0</h2>
+                <span>إجمالي المصروفات المسجلة</span>
+            </div>
+
+            <div class="card">
+                <small>صافي الرصيد</small>
+                <h2 id="balance">0</h2>
+                <span>الإيرادات - المصروفات</span>
+            </div>
+
+        </div>
+
+        <div class="content-grid">
+
+            <div class="box">
+                <h3>📊 التحليل المالي</h3>
+                <canvas id="financeChart"></canvas>
+            </div>
+
+            <div class="box">
+                <h3>⚡ معلومات النظام</h3>
+                <p style="color:#aab6c9;line-height:3">
+                    حالة النظام: 🟢 يعمل<br>
+                    إصدار النظام: 1.0.0<br>
+                    المستخدم: ADMIN<br>
+                    قاعدة البيانات: تخزين محلي تجريبي
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- STUDENTS -->
+    <section class="section" id="students">
+
+        <div class="box">
+
+            <h3>إضافة طالب جديد</h3>
+
+            <div class="form-grid">
+
+                <input id="studentName" placeholder="اسم الطالب">
+
+                <input id="studentId" placeholder="الرقم الجامعي">
+
+                <input id="studentDepartment" placeholder="القسم الدراسي">
+
+                <input id="studentPhone" placeholder="رقم الهاتف">
+
+                <button class="gold-btn" onclick="addStudent()">إضافة الطالب</button>
+
+            </div>
+
+        </div>
+
+        <div class="box">
+
+            <h3>سجل الطلاب</h3>
+
+            <div class="table-wrap">
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الاسم</th>
+                            <th>الرقم الجامعي</th>
+                            <th>القسم</th>
+                            <th>الهاتف</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="studentsTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ACCOUNTING -->
+    <section class="section" id="accounting">
+
+        <div class="box">
+
+            <h3>📒 إضافة عملية مالية</h3>
+
+            <div class="form-grid">
+
+                <input id="operationName" placeholder="اسم العملية">
+
+                <select id="operationType">
+                    <option value="income">إيراد</option>
+                    <option value="expense">مصروف</option>
+                </select>
+
+                <input id="operationAmount" type="number" placeholder="المبلغ بالجنيه">
+
+                <input id="operationDate" type="date">
+
+                <button class="gold-btn" onclick="addOperation()">حفظ العملية المالية</button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- TRANSACTIONS -->
+    <section class="section" id="transactions">
+
+        <div class="box">
+
+            <h3>سجل العمليات المالية</h3>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>العملية</th>
+                            <th>النوع</th>
+                            <th>المبلغ</th>
+                            <th>التاريخ</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="operationsTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- EXAMS -->
+    <section class="section" id="exams">
+
+        <div class="box">
+
+            <h3>إدارة درجات الامتحانات</h3>
+
+            <div class="form-grid">
+
+                <input id="examStudent" placeholder="اسم الطالب">
+
+                <input id="examSubject" placeholder="اسم المادة">
+
+                <input id="examGrade" type="number" placeholder="الدرجة">
+
+                <button class="gold-btn" onclick="addExam()">حفظ الدرجة</button>
+
+            </div>
+
+        </div>
+
+        <div class="box">
+
+            <h3>نتائج الطلاب</h3>
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>الطالب</th>
+                            <th>المادة</th>
+                            <th>الدرجة</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="examTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- REPORTS -->
+    <section class="section" id="reports">
+
+        <div class="box">
+
+            <h3>📈 التقارير المالية</h3>
+
+            <div class="stats">
+
+                <div class="card">
+                    <small>الإيرادات</small>
+                    <h2 id="reportIncome">0</h2>
+                </div>
+
+                <div class="card">
+                    <small>المصروفات</small>
+                    <h2 id="reportExpenses">0</h2>
+                </div>
+
+                <div class="card">
+                    <small>صافي الرصيد</small>
+                    <h2 id="reportBalance">0</h2>
+                </div>
+
+            </div>
+
+            <button class="gold-btn" onclick="window.print()">طباعة التقرير</button>
+
+        </div>
+
+    </section>
+
+
+    <!-- SETTINGS -->
+    <section class="section" id="settings">
+
+        <div class="box">
+
+            <h3>إعدادات النظام</h3>
+
+            <p style="color:#aab6c9;line-height:2">
+                VERITAS ERP<br>
+                إصدار 1.0.0<br>
+                نظام إدارة ومحاسبة المؤسسات التعليمية.
+            </p>
+
+            <br>
+
+            <button class="danger-btn" onclick="resetData()">مسح البيانات المحلية</button>
+
+        </div>
+
+    </section>
+
+
+    <div class="footer">
+        VERITAS ERP © 2026 | جميع الحقوق محفوظة
+    </div>
+
+</main>
+
+</div>
+
+
+<script>
+
+let students = JSON.parse(localStorage.getItem("students") || "[]");
+
+let operations = JSON.parse(localStorage.getItem("operations") || "[]");
+
+let exams = JSON.parse(localStorage.getItem("exams") || "[]");
+
+let financeChart;
+
+
+// LOGIN
+function login(){
+
+    let user = document.getElementById("username").value;
+
+    let pass = document.getElementById("password").value;
+
+    if(user === "admin" && pass === "123456"){
+
+        document.getElementById("loginScreen").style.display="none";
+
+        document.getElementById("app").style.display="block";
+
+        updateAll();
+
+        drawChart();
+
+    }else{
+
+        document.getElementById("error").innerText="اسم المستخدم أو كلمة المرور غير صحيحة";
+
+    }
+
+}
+
+
+function logout(){
+
+    document.getElementById("app").style.display="none";
+
+    document.getElementById("loginScreen").style.display="flex";
+
+}
+
+
+// NAVIGATION
+function showPage(id,btn){
+
+    document.querySelectorAll(".section").forEach(s=>{
+        s.classList.remove("active");
+    });
+
+    document.getElementById(id).classList.add("active");
+
+    document.querySelectorAll(".menu button").forEach(b=>{
+        b.classList.remove("active");
+    });
+
+    btn.classList.add("active");
+
+    let titles={
+        dashboard:"لوحة التحكم",
+        students:"إدارة الطلاب",
+        accounting:"الحسابات المالية",
+        transactions:"العمليات المالية",
+        exams:"إدارة الامتحانات",
+        reports:"التقارير المالية",
+        settings:"الإعدادات"
+    };
+
+    document.getElementById("pageTitle").innerText=titles[id];
+
+    updateAll();
+
+}
+
+
+// STUDENTS
+function addStudent(){
+
+    let name=document.getElementById("studentName").value.trim();
+
+    let id=document.getElementById("studentId").value.trim();
+
+    let department=document.getElementById("studentDepartment").value.trim();
+
+    let phone=document.getElementById("studentPhone").value.trim();
+
+    if(!name || !id || !department){
+        alert("من فضلك أكمل البيانات المطلوبة");
+        return;
+    }
+
+    if(students.some(s=>s.id===id)){
+        alert("هذا الرقم الجامعي مسجل بالفعل");
+        return;
+    }
+
+    students.push({name,id,department,phone});
+
+    saveData();
+
+    document.getElementById("studentName").value="";
+    document.getElementById("studentId").value="";
+    document.getElementById("studentDepartment").value="";
+    document.getElementById("studentPhone").value="";
+
+    updateAll();
+
+}
+
+
+// FINANCIAL OPERATIONS
+function addOperation(){
+
+    let name=document.getElementById("operationName").value.trim();
+
+    let type=document.getElementById("operationType").value;
+
+    let amount=Number(document.getElementById("operationAmount").value);
+
+    let date=document.getElementById("operationDate").value;
+
+    if(!name || amount<=0 || !Number.isFinite(amount) || !date){
+        alert("أدخل بيانات العملية بشكل صحيح");
+        return;
+    }
+
+    operations.push({name,type,amount,date});
+
+    saveData();
+
+    document.getElementById("operationName").value="";
+    document.getElementById("operationAmount").value="";
+    document.getElementById("operationDate").value="";
+
+    updateAll();
+
+    alert("تم تسجيل العملية بنجاح");
+
+}
+
+
+// EXAMS
+function addExam(){
+
+    let student=document.getElementById("examStudent").value.trim();
+
+    let subject=document.getElementById("examSubject").value.trim();
+
+    let grade=Number(document.getElementById("examGrade").value);
+
+    if(!student || !subject || !Number.isFinite(grade) || grade<0 || grade>100){
+        alert("أدخل بيانات صحيحة والدرجة من 0 إلى 100");
+        return;
+    }
+
+    exams.push({student,subject,grade});
+
+    saveData();
+
+    document.getElementById("examStudent").value="";
+    document.getElementById("examSubject").value="";
+    document.getElementById("examGrade").value="";
+
+    updateAll();
+
+}
+
+
+// SAVE
+function saveData(){
+
+    localStorage.setItem("students",JSON.stringify(students));
+
+    localStorage.setItem("operations",JSON.stringify(operations));
+
+    localStorage.setItem("exams",JSON.stringify(exams));
+
+}
+
+
+// UPDATE ALL
+function updateAll(){
+
+    let income=operations
+        .filter(o=>o.type==="income")
+        .reduce((sum,o)=>sum+o.amount,0);
+
+    let expenses=operations
+        .filter(o=>o.type==="expense")
+        .reduce((sum,o)=>sum+o.amount,0);
+
+    let balance=income-expenses;
+
+    document.getElementById("studentCount").innerText=students.length;
+
+    document.getElementById("income").innerText=income.toLocaleString("en-US")+" ج";
+
+    document.getElementById("expenses").innerText=expenses.toLocaleString("en-US")+" ج";
+
+    document.getElementById("balance").innerText=balance.toLocaleString("en-US")+" ج";
+
+    document.getElementById("reportIncome").innerText=income.toLocaleString("en-US")+" ج";
+
+    document.getElementById("reportExpenses").innerText=expenses.toLocaleString("en-US")+" ج";
+
+    document.getElementById("reportBalance").innerText=balance.toLocaleString("en-US")+" ج";
+
+
+    document.getElementById("studentsTable").innerHTML=students.map(s=>`
+
+        <tr>
+            <td>${escapeHTML(s.name)}</td>
+            <td>${escapeHTML(s.id)}</td>
+            <td>${escapeHTML(s.department)}</td>
+            <td>${escapeHTML(s.phone)}</td>
+        </tr>
+
+    `).join("");
+
+
+    document.getElementById("operationsTable").innerHTML=operations.map(o=>`
+
+        <tr>
+            <td>${escapeHTML(o.name)}</td>
+            <td>${o.type==="income"?"إيراد":"مصروف"}</td>
+            <td>${o.amount.toLocaleString("en-US")} ج</td>
+            <td>${escapeHTML(o.date)}</td>
+        </tr>
+
+    `).join("");
+
+
+    document.getElementById("examTable").innerHTML=exams.map(e=>`
+
+        <tr>
+            <td>${escapeHTML(e.student)}</td>
+            <td>${escapeHTML(e.subject)}</td>
+            <td>${e.grade} / 100</td>
+        </tr>
+
+    `).join("");
+
+    if(financeChart){
+        financeChart.data.datasets[0].data=[income,expenses];
+        financeChart.update();
+    }
+
+}
+
+
+function escapeHTML(value){
+
+    return String(value).replace(/[&<>"']/g,function(char){
+        return {
+            "&":"&amp;",
+            "<":"&lt;",
+            ">":"&gt;",
+            '"':"&quot;",
+            "'":"&#039;"
+        }[char];
+    });
+
+}
+
+
+// CHART
+function drawChart(){
+
+    let ctx=document.getElementById("financeChart");
+
+    let income=operations
+        .filter(o=>o.type==="income")
+        .reduce((sum,o)=>sum+o.amount,0);
+
+    let expenses=operations
+        .filter(o=>o.type==="expense")
+        .reduce((sum,o)=>sum+o.amount,0);
+
+    if(financeChart){
+        financeChart.destroy();
+    }
+
+    financeChart=new Chart(ctx,{
+
+        type:"bar",
+
+        data:{
+
+            labels:["الإيرادات","المصروفات"],
+
+            datasets:[{
+
+                label:"القيمة بالجنيه",
+
+                data:[income,expenses],
+
+                backgroundColor:["#d6ad55","#5579a8"],
+
+                borderRadius:8
+
+            }]
+
+        },
+
+        options:{
+
+            responsive:true,
+
+            plugins:{
+                legend:{display:false}
+            },
+
+            scales:{
+                y:{
+                    beginAtZero:true,
+                    ticks:{color:"#aab6c9"},
+                    grid:{color:"#26334a"}
+                },
+
+                x:{
+                    ticks:{color:"#aab6c9"},
+                    grid:{display:false}
+                }
+            }
+
+        }
+
+    });
+
+}
+
+
+// RESET
+function resetData(){
+
+    if(confirm("هل تريد مسح جميع البيانات المحلية؟")){
+
+        students=[];
+
+        operations=[];
+
+        exams=[];
+
+        saveData();
+
+        updateAll();
+
+        alert("تم مسح البيانات");
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
